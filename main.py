@@ -91,3 +91,20 @@ num_workers = 0
 batch_size = 20
 # percentage of training set to use as validation
 valid_size = 0.2
+
+# Data transform to convert data to a tensor and apply normalization
+
+# augment train and validation dataset with RandomHorizontalFlip and RandomRotation
+train_transform = transforms.Compose([
+    transforms.Resize((32, 32)),
+    transforms.RandomHorizontalFlip(), # randomly flip and rotate
+    transforms.RandomRotation(10),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    ])
+
+test_transform = transforms.Compose([
+    transforms.Resize((32, 32)),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    ])
