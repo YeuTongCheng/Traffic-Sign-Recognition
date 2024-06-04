@@ -84,3 +84,10 @@ def split_data(class_name):
 for class_name in os.listdir(original_data_path):
     if os.path.isdir(os.path.join(original_data_path, class_name)):
         split_data(class_name)
+
+# number of subprocesses to use for data loading
+num_workers = 0
+# how many samples per batch to load
+batch_size = 20
+# percentage of training set to use as validation
+valid_size = 0.2
