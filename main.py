@@ -108,3 +108,15 @@ test_transform = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
+
+from PIL import Image
+
+# Replace with a specific PPM file path
+test_image_path = '/content/train/00000_00000.ppm'
+
+try:
+    img = Image.open(test_image_path)
+    img.show()  # This will display the image if you are in a GUI environment
+    print("PPM file opened successfully.")
+except IOError as e:
+    print(f"Error in opening PPM file: {e}")
