@@ -120,3 +120,7 @@ try:
     print("PPM file opened successfully.")
 except IOError as e:
     print(f"Error in opening PPM file: {e}")
+
+# choose the training and test datasets
+train_dataset = datasets.ImageFolder(root='/content/train', transform=train_transform)
+testset = datasets.ImageFolder('/content/test', transform = test_transform)
