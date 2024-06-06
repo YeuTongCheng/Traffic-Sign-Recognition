@@ -136,3 +136,11 @@ train_idx, valid_idx = indices[split:], indices[:split]
 # Samples elements randomly from a given list of indices, without replacement.
 train_sampler = SubsetRandomSampler(train_idx)
 valid_sampler = SubsetRandomSampler(valid_idx)
+
+# Set up training dataset & training dataloader
+train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size,
+    sampler=train_sampler, num_workers=num_workers)
+valid_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size,
+    sampler=valid_sampler, num_workers=num_workers)
+test_loader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
+    num_workers=num_workers,shuffle=True)
