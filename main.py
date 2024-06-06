@@ -124,3 +124,12 @@ except IOError as e:
 # choose the training and test datasets
 train_dataset = datasets.ImageFolder(root='/content/train', transform=train_transform)
 testset = datasets.ImageFolder('/content/test', transform = test_transform)
+
+# obtain training indices that will be used for validation
+num_train = len(train_dataset)
+indices = list(range(num_train))
+np.random.shuffle(indices)
+split = int(np.floor(valid_size * num_train))
+train_idx, valid_idx = indices[split:], indices[:split]
+
+
