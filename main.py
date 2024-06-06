@@ -190,3 +190,8 @@ classes = ['Speed limit (20km/h)',
             'End of no passing',
             'End no passing veh > 3.5 tons']
 classes
+
+def imshow(img):
+    img = img / 2 + 0.5  # unnormalize
+    img = np.clip(img, 0, 1)  # clip values to [0, 1]
+    plt.imshow(np.transpose(img, (1, 2, 0)))
