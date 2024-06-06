@@ -195,3 +195,9 @@ def imshow(img):
     img = img / 2 + 0.5  # unnormalize
     img = np.clip(img, 0, 1)  # clip values to [0, 1]
     plt.imshow(np.transpose(img, (1, 2, 0)))
+
+# obtain one batch of training images
+dataiter = iter(train_loader)
+images, labels = next(dataiter)
+images = images.numpy() # convert images to numpy for display
+images.shape # (number of examples: 20, number of channels: 3, pixel sizes: 32x32)
