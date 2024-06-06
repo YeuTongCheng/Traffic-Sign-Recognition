@@ -132,4 +132,7 @@ np.random.shuffle(indices)
 split = int(np.floor(valid_size * num_train))
 train_idx, valid_idx = indices[split:], indices[:split]
 
-
+# define samplers for obtaining training and validation batches
+# Samples elements randomly from a given list of indices, without replacement.
+train_sampler = SubsetRandomSampler(train_idx)
+valid_sampler = SubsetRandomSampler(valid_idx)
