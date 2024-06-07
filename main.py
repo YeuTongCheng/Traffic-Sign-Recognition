@@ -209,3 +209,23 @@ for idx in np.arange(20):
     ax = fig.add_subplot(2, 10, idx+1, xticks=[], yticks=[])
     imshow(images[idx])
     ax.set_title(classes[labels[idx]])
+
+# Create the network
+class TrafficSignal(nn.Module):
+    def __init__(self):
+        super(TrafficSignal, self).__init__()
+        self.fc1 = nn.Linear(1024*3, 256)
+        self.fc2 = nn.Linear(256, 128)
+        self.fc3 = nn.Linear(128, 64)
+        self.fc4 = nn.Linear(64, 43)  # Output layer with 43 classes
+
+    def forward(self, x):
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = F.relu(self.fc3(x))
+        x = F.log_softmax(self.fc4(x), dim=1)
+        return x
+
+# Create an instance of the network
+model1 = TrafficSignal()
+model1
