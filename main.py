@@ -201,3 +201,11 @@ dataiter = iter(train_loader)
 images, labels = next(dataiter)
 images = images.numpy() # convert images to numpy for display
 images.shape # (number of examples: 20, number of channels: 3, pixel sizes: 32x32)
+
+# plot the images in the batch, along with the corresponding labels
+fig = plt.figure(figsize=(30, 4))
+# display 20 images
+for idx in np.arange(20):
+    ax = fig.add_subplot(2, 10, idx+1, xticks=[], yticks=[])
+    imshow(images[idx])
+    ax.set_title(classes[labels[idx]])
