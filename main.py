@@ -334,3 +334,50 @@ for e in range(epochs):
               "Test Loss: {:.3f}.. ".format(test_loss),
               "Test Accuracy: {:.3f}".format(accuracy / len(test_loader)))
 
+
+def test_model(model, dataloader):
+    model.eval()
+
+    total_size = len(dataloader.dataset)
+
+    predictions = np.zeros(total_size)
+    all_classes = np.zeros(total_size)
+    all_proba = np.zeros((total_size, 43))
+
+    i = 0
+    running_loss = 0.0
+    running_corrects = 0
+
+    for inputs, classes in dataloader:
+        inputs = inputs.to(device)
+        classes = classes.to(device)
+
+        # 1. Compute outputs
+        outputs = model(inputs)
+
+        # 2. Compute loss
+        loss = criterion(outputs, classes)
+        _, preds = torch.max(outputs.data, dim=1)
+
+        # Add loss and number of correct predictions
+        running_loss += loss.data.item()
+        running_corrects += torch.sum(preds == classes.data)
+
+        # Store the predicted class and true classes
+        batch_size = len(classes)
+        predictions[i:i+batch_size] = preds.to('cpu').numpy()
+        all_classes[i:i+batch_size] = classes.to('cpu').numpy()
+
+        # Store the predicted log probabilities
+        all_proba[i:i+batch_size, :] = outputs.data.to('cpu').numpy()
+
+        i += batch_size
+
+    epoch_loss = running_loss / total_size
+    epoch_acc = running_corrects.data.item() / total_size
+
+    print('Loss: {:.4f} Acc: {:.4f}'.format(epoch_loss, epoch_acc))
+
+    return predictions, all_proba, all_classes
+
+
