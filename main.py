@@ -251,3 +251,5 @@ for e in range(epochs):
         running_loss += loss.item()
     else:
         print(f"Training loss: {running_loss/len(train_loader)}")
+
+
