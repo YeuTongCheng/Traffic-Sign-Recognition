@@ -229,3 +229,25 @@ class TrafficSignal(nn.Module):
 # Create an instance of the network
 model1 = TrafficSignal()
 model1
+
+# Train the network
+from torch import optim
+
+criterion = nn.NLLLoss()
+optimizer = optim.Adam(model1.parameters(), lr=0.003)
+
+epochs = 30
+for e in range(epochs):
+    running_loss = 0
+    for images, labels in train_loader:
+
+        images = images.view(images.shape[0], -1)  # Flatten the input image
+        #Training pass
+        output=model1(images)
+        loss = criterion(output,labels)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        running_loss += loss.item()
+    else:
+        print(f"Training loss: {running_loss/len(train_loader)}")
