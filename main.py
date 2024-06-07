@@ -275,3 +275,62 @@ class Classifier(nn.Module):
         x = F.log_softmax(self.fc4(x), dim=1)
 
         return x
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model2 = Classifier().to(device)
+criterion = nn.NLLLoss()
+optimizer = optim.Adam(model2.parameters(), lr=0.003, weight_decay=1e-4)
+
+epochs = 30
+steps = 0
+
+train_losses, test_losses = [], []
+for e in range(epochs):
+    tot_train_loss = 0
+    for images, labels in train_loader:
+        images=images.to(device)
+        labels=labels.to(device)
+
+        optimizer.zero_grad()
+
+        log_ps = model2(images)
+        loss = criterion(log_ps, labels)
+        loss.backward()
+        optimizer.step()
+
+        tot_train_loss += loss.item()
+
+    else:
+        ## Implement the validation pass and print out the validation accuracy
+        # turn off gradients
+        tot_test_loss =0
+        accuracy = 0  # Number of correct predictions on the test set
+        with torch.no_grad():
+            # set model to evalution mode
+            model2.eval()
+            # validation pass here
+            for images, labels in test_loader:
+              images=images.to(device)
+              labels=labels.to(device)
+              log_ps=model2(images)
+              loss= criterion(log_ps, labels)
+              tot_test_loss += loss.item()
+
+              # Get the class probabilities
+              ps = torch.exp(log_ps)
+              top_p, top_class = ps.topk(1, dim=1)
+              equals = top_class == labels.view(*top_class.shape)
+              accuracy += torch.mean(equals.type(torch.FloatTensor))
+
+        # set model back to train mode
+        model2.train()
+        train_loss =tot_train_loss /len(train_loader)
+        test_loss = tot_test_loss / len(test_loader)
+        train_losses.append(train_loss)
+        test_losses.append(test_loss)
+
+        print("Epoch: {}/{}.. ".format(e+1, epochs),
+              "Training Loss: {:.3f}.. ".format(train_loss),
+              "Test Loss: {:.3f}.. ".format(test_loss),
+              "Test Accuracy: {:.3f}".format(accuracy / len(test_loader)))
+
