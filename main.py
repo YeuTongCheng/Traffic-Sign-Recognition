@@ -435,3 +435,10 @@ class Net(nn.Module):
 # create a complete CNN
 model = Net()
 model
+
+# move tensors to GPU if CUDA is available
+if train_on_gpu:
+    model.cuda()
+# Move all model parameters to the GPU
+for param in model.parameters():
+    param.cuda()
