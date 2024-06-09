@@ -380,4 +380,21 @@ def test_model(model, dataloader):
 
     return predictions, all_proba, all_classes
 
+predictions, all_proba, all_classes = test_model(model2,test_loader)
 
+from sklearn.metrics import confusion_matrix
+import itertools
+def make_fig_cm(cm):
+    fig = plt.figure(figsize=(15,15))
+    plt.imshow(cm, interpolation='nearest', cmap='Blues')
+    tick_marks = np.arange(43);
+    plt.xticks(tick_marks, classes, rotation=90);
+    plt.yticks(tick_marks, classes, rotation=0);
+    plt.tight_layout();
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        coeff = f'{cm[i, j]}'
+        plt.text(j, i, coeff, horizontalalignment="center", verticalalignment="center", color="white" if cm[i, j] > thresh else "black")
+
+    plt.ylabel('Actual');
+    plt.xlabel('Predicted');
