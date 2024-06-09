@@ -398,3 +398,6 @@ def make_fig_cm(cm):
 
     plt.ylabel('Actual');
     plt.xlabel('Predicted');
+
+cm = confusion_matrix(all_classes,predictions)
+make_fig_cm(cm)
