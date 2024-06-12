@@ -512,3 +512,5 @@ for epoch in range(1, n_epochs+1):
         valid_loss))
         torch.save(model.state_dict(), 'model_cifar.pt')
         valid_loss_min = valid_loss
+        
+model.load_state_dict(torch.load('model_cifar.pt'))
