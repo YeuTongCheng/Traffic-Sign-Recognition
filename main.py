@@ -514,3 +514,57 @@ for epoch in range(1, n_epochs+1):
         valid_loss_min = valid_loss
         
 model.load_state_dict(torch.load('model_cifar.pt'))
+
+# track test loss
+test_loss = 0.0
+class_correct = list(0. for i in range(43))
+class_total = list(0. for i in range(43))
+size=len(testset)
+predictions = np.zeros(size)
+all_classes = np.zeros(size)
+all_proba = np.zeros((size,43))
+idx=0
+model.eval()
+# iterate over test data
+for data, target in test_loader:
+    # move tensors to GPU if CUDA is available
+    if train_on_gpu:
+        data, target = data.cuda(), target.cuda()
+    # forward pass: compute predicted outputs by passing inputs to the model
+    output = model(data)
+    # calculate the batch loss
+    loss = criterion(output, target)
+    # update test loss
+    test_loss += loss.item()*data.size(0)
+    # convert output probabilities to predicted class
+    _, pred = torch.max(output, 1)
+    # compare predictions to true label
+    correct_tensor = pred.eq(target.data.view_as(pred))
+    correct = np.squeeze(correct_tensor.numpy()) if not train_on_gpu else np.squeeze(correct_tensor.cpu().numpy())
+
+    predictions[idx:idx+len(target)]=pred.to('cpu').numpy()
+    all_classes[idx:idx+len(target)]=target.to('cpu').numpy()
+    all_proba[idx:idx+len(target),:]=output.to('cpu').detach().numpy()
+    idx+=len(target)
+
+    # calculate test accuracy for each object class
+    for i in range(len(target)):
+        label = target.data[i]
+        class_correct[label] += correct[i].item()
+        class_total[label] += 1
+
+# average test loss
+test_loss = test_loss/len(test_loader.dataset)
+print('Test Loss: {:.6f}\n'.format(test_loss))
+
+for i in range(43):
+    if class_total[i] > 0:
+        print('Test Accuracy of %5s: %.2f%% (%2d/%2d)' % (
+            classes[i], 100 * class_correct[i] / class_total[i],
+            np.sum(class_correct[i]), np.sum(class_total[i])))
+    else:
+        print('Test Accuracy of %5s: N/A (no training examples)' % (classes[i]))
+
+print('\nTest Accuracy (Overall): %.2f%% (%2d/%2d)' % (
+    100. * np.sum(class_correct) / np.sum(class_total),
+    np.sum(class_correct), np.sum(class_total)))
