@@ -442,3 +442,9 @@ if train_on_gpu:
 # Move all model parameters to the GPU
 for param in model.parameters():
     param.cuda()
+    
+# specify loss function (categorical cross-entropy)
+criterion = nn.CrossEntropyLoss()
+
+# specify optimizer
+optimizer = optim.SGD(model.parameters(), lr=0.01)
