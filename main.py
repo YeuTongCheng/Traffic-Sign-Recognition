@@ -687,3 +687,66 @@ cm = confusion_matrix(all_classes,predictions)
 make_fig_cm(cm)
 
 optimizer = optim.SGD(model.parameters(), lr=0.001)
+
+n_epochs = 60
+
+valid_loss_min = np.Inf
+
+
+for epoch in range(1, n_epochs+1):
+
+    train_loss = 0.0
+    valid_loss = 0.0
+
+    ###################
+    # train the model #
+    ###################
+    model.train()
+    for data, target in train_loader:
+        # move tensors to GPU if CUDA is available
+        if train_on_gpu:
+            data, target = data.cuda(), target.cuda()
+        # clear the gradients of all optimized variables
+        optimizer.zero_grad()
+        # forward pass: compute predicted outputs by passing inputs to the model
+        output = model(data)
+
+
+        # calculate the batch loss
+        loss = criterion(output, target)
+        # backward pass: compute gradient of the loss with respect to model parameters
+        loss.backward()
+        # perform a single optimization step (parameter update)
+        optimizer.step()
+        # update training loss
+        train_loss += loss.item()*data.size(0)
+    ######################
+    # validate the model #
+    ######################
+    model.eval()
+    with torch.no_grad():
+      for data, target in valid_loader:
+        # move tensors to GPU if CUDA is available
+        if train_on_gpu:
+            data, target = data.cuda(), target.cuda()
+        # forward pass: compute predicted outputs by passing inputs to the model
+        output = model(data)
+        # calculate the batch loss
+        loss = criterion(output, target)
+        # update average validation loss
+        valid_loss += loss.item()*data.size(0)
+
+    # calculate average losses
+    train_loss = train_loss/len(train_loader.sampler)
+    valid_loss = valid_loss/len(valid_loader.sampler)
+
+    print('Epoch: {} \tTraining Loss: {:.6f} \tValidation Loss: {:.6f}'.format(
+        epoch, train_loss, valid_loss))
+
+    # save model if validation loss has decreased
+    if valid_loss <= valid_loss_min:
+        print('Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...'.format(
+        valid_loss_min,
+        valid_loss))
+        torch.save(model.state_dict(), 'model_cifar.pt')
+        valid_loss_min = valid_loss
