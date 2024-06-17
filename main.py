@@ -685,3 +685,5 @@ print('\nTest Accuracy (Overall): %.2f%% (%2d/%2d)' % (
 
 cm = confusion_matrix(all_classes,predictions)
 make_fig_cm(cm)
+
+optimizer = optim.SGD(model.parameters(), lr=0.001)
