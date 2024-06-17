@@ -682,3 +682,6 @@ for i in range(43):
 print('\nTest Accuracy (Overall): %.2f%% (%2d/%2d)' % (
     100. * np.sum(class_correct) / np.sum(class_total),
     np.sum(class_correct), np.sum(class_total)))
+
+cm = confusion_matrix(all_classes,predictions)
+make_fig_cm(cm)
