@@ -1052,3 +1052,66 @@ for idx in np.arange(20):
 
 cm = confusion_matrix(all_classes,predictions)
 make_fig_cm(cm)
+
+import matplotlib.pyplot as plt
+
+# Test accuracies for each category
+accuracies = {
+    "Speed limit (20km/h)": 100.00,
+    "Speed limit (30km/h)": 99.55,
+    "Speed limit (50km/h)": 99.33,
+    "Speed limit (60km/h)": 99.29,
+    "Speed limit (70km/h)": 100.00,
+    "Speed limit (80km/h)": 99.46,
+    "End of speed limit (80km/h)": 98.82,
+    "Speed limit (100km/h)": 100.00,
+    "Speed limit (120km/h)": 99.65,
+    "No passing": 100.00,
+    "No passing veh over 3.5 tons": 100.00,
+    "Right-of-way at intersection": 100.00,
+    "Priority road": 100.00,
+    "Yield": 100.00,
+    "Stop": 100.00,
+    "No vehicles": 100.00,
+    "Veh > 3.5 tons prohibited": 100.00,
+    "No entry": 99.55,
+    "General caution": 99.58,
+    "Dangerous curve left": 100.00,
+    "Dangerous curve right": 98.63,
+    "Double curve": 100.00,
+    "Bumpy road": 100.00,
+    "Slippery road": 100.00,
+    "Road narrows on the right": 100.00,
+    "Road work": 99.67,
+    "Traffic signals": 98.35,
+    "Pedestrians": 100.00,
+    "Children crossing": 99.08,
+    "Bicycles crossing": 100.00,
+    "Beware of ice/snow": 100.00,
+    "Wild animals crossing": 100.00,
+    "End speed + passing limits": 100.00,
+    "Turn right ahead": 98.55,
+    "Turn left ahead": 100.00,
+    "Ahead only": 100.00,
+    "Go straight or right": 100.00,
+    "Go straight or left": 100.00,
+    "Keep right": 99.76,
+    "Keep left": 100.00,
+    "Roundabout mandatory": 100.00,
+    "End of no passing": 100.00,
+    "End no passing veh > 3.5 tons": 100.00
+}
+
+# Overall accuracy
+overall_accuracy = 99.73
+
+# Plotting
+plt.figure(figsize=(12, 20))
+plt.barh(list(accuracies.keys()), list(accuracies.values()), color='skyblue')
+plt.xlabel('Accuracy (%)')
+plt.title('Test Accuracy for Each Traffic Signal Category')
+plt.xlim(95, 100)  # Adjust the range to focus on differences
+plt.axvline(x=overall_accuracy, color='green', linestyle='--')
+plt.text(overall_accuracy + 0.1, len(accuracies) / 2, f'Overall Accuracy: {overall_accuracy}%', color='green', verticalalignment='center')
+plt.show()
+
