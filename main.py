@@ -1049,3 +1049,6 @@ for idx in np.arange(20):
     imshow(images[idx] if not train_on_gpu else images[idx].cpu())
     ax.set_title("{} ({})".format(classes[preds[idx]], classes[labels[idx]]),
                  color=("green" if preds[idx]==labels[idx].item() else "red"))
+
+cm = confusion_matrix(all_classes,predictions)
+make_fig_cm(cm)
