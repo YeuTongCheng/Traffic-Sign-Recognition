@@ -1117,4 +1117,4 @@ plt.show()
 
 print("Our model: \n\n", model, '\n')
 print("The state dict keys: \n\n", model.state_dict().keys())
-
+torch.save(model.state_dict(), 'checkpoint.pth')
