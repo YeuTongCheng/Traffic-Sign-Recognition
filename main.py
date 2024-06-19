@@ -1026,3 +1026,26 @@ for i in range(43):
 print('\nTest Accuracy (Overall): %.2f%% (%2d/%2d)' % (
     100. * np.sum(class_correct) / np.sum(class_total),
     np.sum(class_correct), np.sum(class_total)))
+
+# obtain one batch of test images
+dataiter = iter(test_loader)
+images, labels = next(dataiter)
+images.numpy()
+
+
+if train_on_gpu:
+    images = images.cuda()
+
+
+output = model(images)
+
+_, preds_tensor = torch.max(output, 1)
+preds = np.squeeze(preds_tensor.numpy()) if not train_on_gpu else np.squeeze(preds_tensor.cpu().numpy())
+
+# plot the images in the batch, along with predicted and true labels
+fig = plt.figure(figsize=(50, 9))
+for idx in np.arange(20):
+    ax = fig.add_subplot(2, 10, idx+1, xticks=[], yticks=[])
+    imshow(images[idx] if not train_on_gpu else images[idx].cpu())
+    ax.set_title("{} ({})".format(classes[preds[idx]], classes[labels[idx]]),
+                 color=("green" if preds[idx]==labels[idx].item() else "red"))
