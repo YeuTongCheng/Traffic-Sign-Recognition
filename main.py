@@ -1115,3 +1115,6 @@ plt.axvline(x=overall_accuracy, color='green', linestyle='--')
 plt.text(overall_accuracy + 0.1, len(accuracies) / 2, f'Overall Accuracy: {overall_accuracy}%', color='green', verticalalignment='center')
 plt.show()
 
+print("Our model: \n\n", model, '\n')
+print("The state dict keys: \n\n", model.state_dict().keys())
+
